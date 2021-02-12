@@ -139,7 +139,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aded20065eb18540aff8d7819562372, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foods:
+  objects:
   - {fileID: 2331705609373186659, guid: ecb3b4b383500f14da26225639af5870, type: 3}
   - {fileID: 3096626074761991220, guid: 7314bfcf7c0e11c408c1e9126093ed65, type: 3}
+  objectNames:
+  - manzana
+  - aguacate
+  - "pl\xE1tano"
+  - "ar\xE1ndano"
+  - "mel\xF3n"
+  - cereza
+  - aceituna
+  - naranja
+  - pera
+  - granada
   index: 0
+  GameMode: learn

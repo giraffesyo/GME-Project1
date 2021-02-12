@@ -18,4 +18,9 @@ public class ReviewManager : MonoBehaviour
     {
         Destroy(GameObject.Find("Name"));
     }
+
+    void UpdateButtonNames()
+    {
+
+    }
 }
