@@ -9,6 +9,7 @@ public class play : MonoBehaviour
     public List<GameObject> objects;
     public List<string> objectNames;
     public List<GameObject> buttonTexts;
+    public List<GameObject> reviewObjectList;
     public GameObject ReviewButtons;
     public GameObject Instructions;
     public int index = 0;
@@ -78,6 +79,7 @@ public class play : MonoBehaviour
         GameMode = "review";
         ReviewButtons.SetActive(true);
         Instructions.SetActive(false);
+        reviewObjectList = new List<GameObject>(objects);
         NextReviewQuestion();
     }
 
@@ -91,10 +93,18 @@ public class play : MonoBehaviour
 
     public void NextReviewQuestion()
     {
-        int randomObject = Random.Range(0, maxIndex);
-        Destroy(currentFood);
-        currentFood = GameObject.Instantiate(objects[randomObject], transform);
-        StartCoroutine(InitReviewButtons());
+            if (reviewObjectList.Count <= 0)
+            {
+                SetLearn();
+                return;
+            }
+            int randomObject = Random.Range(0, reviewObjectList.Count);
+            Debug.Log(randomObject);
+            Destroy(currentFood);
+            currentFood = GameObject.Instantiate(reviewObjectList[randomObject], transform);
+            reviewObjectList.RemoveAt(randomObject);
+            StartCoroutine(InitReviewButtons());
+
     }
 
     IEnumerator InitReviewButtons()
