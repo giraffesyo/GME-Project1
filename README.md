@@ -28,7 +28,7 @@ Login will be supported in a trusted manner, that is, users will be asked for th
 
 We will attempt to use a cloud provider for the speech recogniition capabilities.
 
-# Contributors
+## Contributors
 
 <table>
   <tr>
