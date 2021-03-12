@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+public enum GameModes
+{
+    learn,
+    review
+}
 public class play : MonoBehaviour
 {
 
@@ -17,13 +22,12 @@ public class play : MonoBehaviour
     public int maxIndex;
     private GameObject currentFood;
 
-    public string GameMode = "learn";
+    public GameModes GameMode = GameModes.learn;
 
     private void Awake()
     {
 
     }
-    // Start is called before the first frame update
     void Start()
     {
         ReviewButtons.SetActive(false);
@@ -31,10 +35,10 @@ public class play : MonoBehaviour
         maxIndex = objects.Count;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        if (GameMode == "learn")
+        if (GameMode == GameModes.learn)
         {
             if (Input.GetKeyDown(KeyCode.A))
             {
@@ -60,7 +64,7 @@ public class play : MonoBehaviour
                 currentFood = GameObject.Instantiate(objects[index], transform);
             }
         }
-        else if(GameMode == "review")
+        else if (GameMode == GameModes.review)
         {
             if (GameObject.Find("Name"))
             {
@@ -75,8 +79,8 @@ public class play : MonoBehaviour
 
     void SetReview()
     {
-        
-        GameMode = "review";
+
+        GameMode = GameModes.review;
         ReviewButtons.SetActive(true);
         Instructions.SetActive(false);
         reviewObjectList = new List<GameObject>(objects);
@@ -85,7 +89,7 @@ public class play : MonoBehaviour
 
     public void CheckAnswer(GameObject buttonText)
     {
-        if(currentName == buttonText.GetComponent<TextMeshProUGUI>().text)
+        if (currentName == buttonText.GetComponent<TextMeshProUGUI>().text)
         {
             NextReviewQuestion();
         }
@@ -93,17 +97,17 @@ public class play : MonoBehaviour
 
     public void NextReviewQuestion()
     {
-            if (reviewObjectList.Count <= 0)
-            {
-                SetLearn();
-                return;
-            }
-            int randomObject = Random.Range(0, reviewObjectList.Count);
-            Debug.Log(randomObject);
-            Destroy(currentFood);
-            currentFood = GameObject.Instantiate(reviewObjectList[randomObject], transform);
-            reviewObjectList.RemoveAt(randomObject);
-            StartCoroutine(InitReviewButtons());
+        if (reviewObjectList.Count <= 0)
+        {
+            SetLearn();
+            return;
+        }
+        int randomObject = Random.Range(0, reviewObjectList.Count);
+        Debug.Log(randomObject);
+        Destroy(currentFood);
+        currentFood = GameObject.Instantiate(reviewObjectList[randomObject], transform);
+        reviewObjectList.RemoveAt(randomObject);
+        StartCoroutine(InitReviewButtons());
 
     }
 
@@ -127,7 +131,7 @@ public class play : MonoBehaviour
 
     void SetLearn()
     {
-        GameMode = "learn";
+        GameMode = GameModes.learn;
         ReviewButtons.SetActive(false);
         Instructions.SetActive(true);
         Destroy(currentFood);
@@ -136,11 +140,11 @@ public class play : MonoBehaviour
 
     public void SwapMode()
     {
-        if(GameMode == "learn")
+        if (GameMode == GameModes.learn)
         {
             SetReview();
         }
-        else if(GameMode == "review")
+        else if (GameMode == GameModes.review)
         {
             SetLearn();
         }
