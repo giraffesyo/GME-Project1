@@ -110,19 +110,20 @@ public class play : MonoBehaviour
     IEnumerator InitReviewButtons()
     {
         yield return new WaitForEndOfFrame();
-        currentName = currentFood.name.Replace("(Clone)", "");
-
-        int randomIndex = Random.Range(0, buttonTexts.Count);
-        List<string> temp = new List<string>(objectNames);
-        temp.Remove(currentName);
-        for (int i = 0; i < 3; i++)
-        {
-            string tempName = temp[Random.Range(0, temp.Count - 1)];
-            temp.Remove(tempName);
-            buttonTexts[i].GetComponent<TextMeshProUGUI>().text = tempName;
-        }
-
-        buttonTexts[randomIndex].GetComponent<TextMeshProUGUI>().text = currentName;
+        // currentName = currentFood.name.Replace("(Clone)", "");
+        //
+        // int randomIndex = Random.Range(0, buttonTexts.Count);
+        // List<string> temp = new List<string>(objectNames);
+        // temp.Remove(currentName);
+        // for (int i = 0; i < 3; i++)
+        // {
+        //     string tempName = temp[Random.Range(0, temp.Count - 1)];
+        //     temp.Remove(tempName);
+        //     buttonTexts[i].GetComponent<TextMeshProUGUI>().text = tempName;
+        // }
+        //
+        // buttonTexts[randomIndex].GetComponent<TextMeshProUGUI>().text = currentName;
+        
     }
 
     void SetLearn()
