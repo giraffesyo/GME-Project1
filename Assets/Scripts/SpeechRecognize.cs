@@ -27,7 +27,7 @@ public class SpeechRecognize : MonoBehaviour
     [SerializeField] private string SubscriptionKey;
 
     [SerializeField] private string SubscriptionRegion;
-    
+
     private bool _micPermissionGranted = false;
     public Text outputText;
     public Button recoButton;
@@ -170,10 +170,10 @@ public class SpeechRecognize : MonoBehaviour
             _recognizer.Recognizing += RecognizingHandler;
             _recognizer.Recognized += RecognizedHandler;
             _recognizer.Canceled += CanceledHandler;
-            
+
             foreach (var device in Microphone.devices)
             {
-                Debug.Log("DeviceName: " + device);                
+                Debug.Log("DeviceName: " + device);
             }
             _audioSource = GameObject.Find("AudioSource").GetComponent<AudioSource>();
         }
