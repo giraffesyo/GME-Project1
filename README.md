@@ -26,7 +26,7 @@ For the cloud component: Each correct answer will render a point and that score 
 
 Login will be supported in a trusted manner, that is, users will be asked for their username and then they are logged in to that profile, no password required.
 
-We will attempt to use a cloud provider for the speech recogniition capabilities.
+We will attempt to use a cloud provider for the speech recognition capabilities.
 
 ## Contributors
 
