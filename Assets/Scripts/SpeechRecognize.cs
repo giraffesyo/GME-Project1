@@ -28,7 +28,7 @@ public class SpeechRecognize : MonoBehaviour
     [SerializeField] private string SubscriptionRegion;
 
     private bool _micPermissionGranted = false;
-    public Text outputText;
+    public TextMeshProUGUI outputText;
     public Button recoButton;
     TranslationRecognizer _recognizer;
     SpeechTranslationConfig _config;
