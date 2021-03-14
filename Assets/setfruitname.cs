@@ -5,7 +5,8 @@ using TMPro;
 
 public class setfruitname : MonoBehaviour
 {
-    public string fruitname;
+    public string fruitnameSpanish;
+    public string fruitnameEnglish;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,11 +21,14 @@ public class setfruitname : MonoBehaviour
 
     public void setName()
     {
-        gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().text = fruitname;
+        gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().text = fruitnameSpanish;
+        gameObject.transform.GetChild(1).GetComponent<TextMeshPro>().text = fruitnameEnglish;
+
     }
 
     public void removeName()
     {
         gameObject.transform.GetChild(0).GetComponent<TextMeshPro>().text = "";
+        gameObject.transform.GetChild(1).GetComponent<TextMeshPro>().text = "";
     }
 }
