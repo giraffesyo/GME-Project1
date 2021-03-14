@@ -40,6 +40,7 @@ public class bodyparttakedamage : MonoBehaviour
 
     public void TakeDamage()
     {
+        Debug.Log("what");
         HPBar.value--;
     }
 }

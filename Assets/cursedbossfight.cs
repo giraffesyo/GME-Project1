@@ -91,10 +91,9 @@ public class cursedbossfight : MonoBehaviour
 
     public void NextReviewQuestion()
     {
-
         int randomObject = Random.Range(0, reviewObjectList.Count);
         Debug.Log(randomObject);
-        Destroy(currentFood);
+        DestroyImmediate(currentFood, true);
         currentFood = GameObject.Instantiate(reviewObjectList[randomObject], new Vector3(transform.position.x, transform.position.y + 3, transform.position.z), Quaternion.identity);
         currentFood.transform.localScale = currentFood.transform.localScale * 4;
         StartCoroutine(InitReviewButtons());

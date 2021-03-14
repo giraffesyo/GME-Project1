@@ -18,9 +18,9 @@ public class bodyparthit : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag != "bosspiece")
+        if(other.transform.gameObject.tag != "bosspiece")
         {
-            Debug.Log(other.gameObject.name);
+            Debug.Log(other.gameObject.name + "body part hit by");
             GameObject parent = transform.parent.gameObject;
             parent.GetComponent<bodyparttakedamage>().TakeDamage();
             Destroy(other.transform.gameObject);

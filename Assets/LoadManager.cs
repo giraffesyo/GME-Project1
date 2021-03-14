@@ -17,8 +17,8 @@ public class LoadManager : MonoBehaviour
         
     }
 
-    public void ReloadBoss()
+    public void load(string scene)
     {
-        SceneManager.LoadScene("boss");
+        SceneManager.LoadScene(scene);
     }
 }
