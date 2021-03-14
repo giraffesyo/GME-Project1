@@ -19,7 +19,6 @@ using UnityEngine.Android;
 #endif
 #if PLATFORM_IOS
 using UnityEngine.iOS;
-using System.Collections;
 #endif
 
 public class SpeechRecognize : MonoBehaviour
@@ -147,7 +146,7 @@ public class SpeechRecognize : MonoBehaviour
 #if PLATFORM_ANDROID
             // Request to use the microphone, cf.
             // https://docs.unity3d.com/Manual/android-RequestingPermissions.html
-            message = "Waiting for mic permission";
+            _message = "Waiting for mic permission";
             if (!Permission.HasUserAuthorizedPermission(Permission.Microphone))
             {
                 Permission.RequestUserPermission(Permission.Microphone);
@@ -191,16 +190,16 @@ public class SpeechRecognize : MonoBehaviour
     void FixedUpdate()
     {
 #if PLATFORM_ANDROID
-        if (!micPermissionGranted && Permission.HasUserAuthorizedPermission(Permission.Microphone))
+        if (!_micPermissionGranted && Permission.HasUserAuthorizedPermission(Permission.Microphone))
         {
-            micPermissionGranted = true;
-            message = "Click button to recognize speech";
+            _micPermissionGranted = true;
+            _message = "Click button to recognize speech";
         }
 #elif PLATFORM_IOS
-        if (!micPermissionGranted && Application.HasUserAuthorization(UserAuthorization.Microphone))
+        if (!_micPermissionGranted && Application.HasUserAuthorization(UserAuthorization.Microphone))
         {
-            micPermissionGranted = true;
-            message = "Click button to recognize speech";
+            _micPermissionGranted = true;
+            _message = "Click button to recognize speech";
         }
 #endif
         lock (_threadLocker)
