@@ -60,3 +60,6 @@ crashlytics-build.properties
 
 # Mac generated file
 .DS_Store
+
+# Ignore SpeechSDK, instead of using git lfs, because git lfs only allows 1gb per month
+Assets/SpeechSDK/
