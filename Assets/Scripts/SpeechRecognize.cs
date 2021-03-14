@@ -216,7 +216,7 @@ public class SpeechRecognize : MonoBehaviour
 
         if (Microphone.IsRecording(Microphone.devices[0]) && _recognitionStarted == true)
         {
-            GameObject.Find("Option1").GetComponentInChildren<TextMeshProUGUI>().text = "Stop";
+            recoButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Stop";
             int pos = Microphone.GetPosition(Microphone.devices[0]);
             int diff = pos - _lastSample;
 
@@ -235,7 +235,7 @@ public class SpeechRecognize : MonoBehaviour
         }
         else if (!Microphone.IsRecording(Microphone.devices[0]) && _recognitionStarted == false)
         {
-            GameObject.Find("Option1").GetComponentInChildren<TextMeshProUGUI>().text = "Start";
+            recoButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Start";
         }
     }
 }

@@ -8,6 +8,12 @@ public enum GameModes
     learn,
     review
 }
+
+public enum ReviewModes
+{
+    ThreeWords,
+    Speech
+}
 public class play : MonoBehaviour
 {
 
@@ -23,7 +29,10 @@ public class play : MonoBehaviour
     private GameObject currentFood;
 
     public GameModes GameMode = GameModes.learn;
-
+    [SerializeField]
+    private GameObject SpeechContainer;
+    [SerializeField]
+    private GameObject ThreeWordsContainer;
     private void Awake()
     {
 
@@ -38,6 +47,9 @@ public class play : MonoBehaviour
 
     void Update()
     {
+
+
+
         if (GameMode == GameModes.learn)
         {
             if (Input.GetKeyDown(KeyCode.A))
@@ -66,6 +78,12 @@ public class play : MonoBehaviour
         }
         else if (GameMode == GameModes.review)
         {
+            // override to skip the question
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                NextReviewQuestion();
+            }
+
             if (GameObject.Find("Name"))
             {
                 currentName = currentFood.name.Replace("(Clone)", "");
@@ -97,6 +115,19 @@ public class play : MonoBehaviour
 
     public void NextReviewQuestion()
     {
+        // get a random mode to switch to 
+        ReviewModes randomMode = (ReviewModes)Random.Range(0, 2);
+        if (randomMode == ReviewModes.Speech)
+        {
+            SpeechContainer.SetActive(true);
+            ThreeWordsContainer.SetActive(false);
+        }
+        else if (randomMode == ReviewModes.ThreeWords)
+        {
+            SpeechContainer.SetActive(false);
+            ThreeWordsContainer.SetActive(true);
+        }
+
         if (reviewObjectList.Count <= 0)
         {
             SetLearn();
@@ -114,20 +145,20 @@ public class play : MonoBehaviour
     IEnumerator InitReviewButtons()
     {
         yield return new WaitForEndOfFrame();
-        // currentName = currentFood.name.Replace("(Clone)", "");
-        //
-        // int randomIndex = Random.Range(0, buttonTexts.Count);
-        // List<string> temp = new List<string>(objectNames);
-        // temp.Remove(currentName);
-        // for (int i = 0; i < 3; i++)
-        // {
-        //     string tempName = temp[Random.Range(0, temp.Count - 1)];
-        //     temp.Remove(tempName);
-        //     buttonTexts[i].GetComponent<TextMeshProUGUI>().text = tempName;
-        // }
-        //
-        // buttonTexts[randomIndex].GetComponent<TextMeshProUGUI>().text = currentName;
-        
+        currentName = currentFood.name.Replace("(Clone)", "");
+
+        int randomIndex = Random.Range(0, buttonTexts.Count);
+        List<string> temp = new List<string>(objectNames);
+        temp.Remove(currentName);
+        for (int i = 0; i < 3; i++)
+        {
+            string tempName = temp[Random.Range(0, temp.Count - 1)];
+            temp.Remove(tempName);
+            buttonTexts[i].GetComponent<TextMeshProUGUI>().text = tempName;
+        }
+
+        buttonTexts[randomIndex].GetComponent<TextMeshProUGUI>().text = currentName;
+
     }
 
     void SetLearn()
