@@ -21,6 +21,7 @@ public class cursedbossfight : MonoBehaviour
     public List<GameObject> reviewObjectList;
     public List<GameObject> buttonTexts;
     public List<string> objectNames;
+    public GameObject WinScreen;
     void Start()
     {
         cam = Camera.main;
@@ -62,16 +63,20 @@ public class cursedbossfight : MonoBehaviour
     IEnumerator Die()
     {
         int i = 0;
-        while(i < 1000)
+        Destroy(currentFood);
+        Destroy(GameObject.Find("ReviewButtons"));
+        while (i < 1000)
         {
             i++;
             GameObject temp = Instantiate(bodyParts[Random.Range(0, bodyParts.Count)], transform.position, Random.rotation);
             temp.GetComponent<Rigidbody>().velocity = (Random.onUnitSphere) * Random.Range(8, 20);
             temp.GetComponent<Rigidbody>().useGravity = true;
+            temp.tag = "Untagged";
             Destroy(temp, 3);
             yield return null;
         }
-        
+
+        GameObject win = Instantiate(WinScreen);
     }
 
     public void CheckAnswer(GameObject buttonText)
@@ -90,7 +95,7 @@ public class cursedbossfight : MonoBehaviour
         int randomObject = Random.Range(0, reviewObjectList.Count);
         Debug.Log(randomObject);
         Destroy(currentFood);
-        currentFood = GameObject.Instantiate(reviewObjectList[randomObject], new Vector3(transform.position.x, transform.position.y + 2, transform.position.z), Quaternion.identity);
+        currentFood = GameObject.Instantiate(reviewObjectList[randomObject], new Vector3(transform.position.x, transform.position.y + 3, transform.position.z), Quaternion.identity);
         currentFood.transform.localScale = currentFood.transform.localScale * 4;
         StartCoroutine(InitReviewButtons());
 
