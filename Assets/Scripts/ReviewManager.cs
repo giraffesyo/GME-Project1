@@ -38,7 +38,6 @@ public class ReviewManager : MonoBehaviour
     void Start()
     {
         // ReviewButtons.SetActive(false);
-        currentFood = GameObject.Instantiate(objects[0], transform);
         sceneLoader = GetComponent<SceneLoader>();
         maxIndex = objects.Count;
         reivewQueue = new List<GameObject>(objects);
@@ -82,23 +81,33 @@ public class ReviewManager : MonoBehaviour
     {
         // get a random mode to switch to 
         ReviewModes randomMode = (ReviewModes)Random.Range(0, numberOfReviewModes + 1);
+        randomMode = ReviewModes.ThreeObjects;
+        int randomObject = Random.Range(0, reivewQueue.Count);
+
         if (randomMode == ReviewModes.Speech)
         {
             speechContainer.SetActive(true);
             threeWordsContainer.SetActive(false);
             threeObjectsContainer.SetActive(false);
+
+            StartCoroutine(InitReviewButtons());
         }
         else if (randomMode == ReviewModes.ThreeWords)
         {
             speechContainer.SetActive(false);
             threeWordsContainer.SetActive(true);
             threeObjectsContainer.SetActive(false);
+
+
+            StartCoroutine(InitReviewButtons());
         }
         else if (randomMode == ReviewModes.ThreeObjects)
         {
             speechContainer.SetActive(false);
             threeWordsContainer.SetActive(false);
             threeObjectsContainer.SetActive(true);
+
+            StartCoroutine(InitThreeObjects());
         }
 
         if (reivewQueue.Count <= 0)
@@ -107,16 +116,47 @@ public class ReviewManager : MonoBehaviour
             return;
         }
 
-        int randomObject = Random.Range(0, reivewQueue.Count);
-
-        Destroy(currentFood);
+        foreach (Transform t in transform)
+        {
+            Destroy(t.gameObject);
+        }
         currentFood = GameObject.Instantiate(reivewQueue[randomObject], transform);
+
         reivewQueue.RemoveAt(randomObject);
-        StartCoroutine(InitReviewButtons());
+
     }
 
 
+    IEnumerator InitThreeObjects()
+    {
+        yield return new WaitForEndOfFrame();
+        // get the name of the fruit from the cloned prefab
+        currentName = currentFood.name.Replace("(Clone)", "");
 
+        List<GameObject> temp = new List<GameObject>(objects);
+        int currentFoodIndex = temp.FindIndex(obj => obj.name == currentName);
+        temp.RemoveAt(currentFoodIndex);
+
+        List<GameObject> objectsToPlace = new List<GameObject>(3);
+        int randomIndex = Random.Range(0, temp.Count);
+        objectsToPlace.Add(Instantiate(temp[randomIndex], transform));
+        temp.RemoveAt(randomIndex);
+        randomIndex = Random.Range(0, temp.Count);
+        objectsToPlace.Add(Instantiate(temp[randomIndex], transform));
+        objectsToPlace.Add(currentFood);
+
+        List<Vector3> positions = new List<Vector3>() { new Vector3(transform.position.x + 5f, transform.position.y, transform.position.z), new Vector3(transform.position.x - 5f, transform.position.y, transform.position.z), transform.position };
+        objectsToPlace.ForEach(obj =>
+        {
+            //FIXME: the text blinks, we don't know why we cant stop it from blinking yet. below code does not work hence commented out @marechem please fix
+            // TextMeshProUGUI text = obj.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            // text.text = "";
+            randomIndex = Random.Range(0, positions.Count);
+            obj.transform.position = positions[randomIndex];
+            positions.RemoveAt(randomIndex);
+        });
+
+    }
     IEnumerator InitReviewButtons()
     {
         yield return new WaitForEndOfFrame();
