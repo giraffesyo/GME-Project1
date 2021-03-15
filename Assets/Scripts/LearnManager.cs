@@ -25,6 +25,8 @@ public class LearnManager : MonoBehaviour
         SwipeDetector.OnSwipe += SwipeHandler;
         // ReviewButtons.SetActive(false);
         currentFood = GameObject.Instantiate(objects[0], transform);
+        currentFood.GetComponentInChildren<TextMeshPro>().text = currentFood.name.Replace("(Clone)", "");
+
         maxIndex = objects.Count;
     }
 
@@ -37,9 +39,6 @@ public class LearnManager : MonoBehaviour
             {
                 index = maxIndex - 1;
             }
-
-            Destroy(currentFood);
-            currentFood = GameObject.Instantiate(objects[index], transform);
         }
         else
         {
@@ -48,10 +47,10 @@ public class LearnManager : MonoBehaviour
             {
                 index = 0;
             }
-
-            Destroy(currentFood);
-            currentFood = GameObject.Instantiate(objects[index], transform);
         }
+        Destroy(currentFood);
+        currentFood = GameObject.Instantiate(objects[index], transform);
+        currentFood.GetComponentInChildren<TextMeshPro>().text = currentFood.name.Replace("(Clone)", "");
     }
 
     private void SwipeHandler(SwipeData swipe)

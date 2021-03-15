@@ -19,7 +19,7 @@ public class ReviewManager : MonoBehaviour
     public int index = 0;
     private string currentName;
     public int maxIndex;
-    // private ReviewModes currentMode;
+    private ReviewModes currentMode;
     private GameObject currentFood;
     [SerializeField]
     private GameObject threeObjectsContainer;
@@ -53,13 +53,6 @@ public class ReviewManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             NextReviewQuestion();
-        }
-
-        if (GameObject.Find("Name"))
-        {
-            currentName = currentFood.name.Replace("(Clone)", "");
-            GameObject.Find("Name").GetComponent<TextMeshPro>().text = "";
-
         }
         // if (currentMode == ReviewModes.ThreeObjects)
         // {
@@ -96,7 +89,7 @@ public class ReviewManager : MonoBehaviour
         ReviewModes randomMode = (ReviewModes)Random.Range(0, numberOfReviewModes + 1);
         randomMode = ReviewModes.ThreeObjects;
         int randomObject = Random.Range(0, reivewQueue.Count);
-        // currentMode = randomMode;
+        currentMode = randomMode;
         if (randomMode == ReviewModes.Speech)
         {
             speechContainer.SetActive(true);
@@ -164,7 +157,6 @@ public class ReviewManager : MonoBehaviour
             randomIndex = Random.Range(0, positions.Count);
             obj.transform.position = positions[randomIndex];
             positions.RemoveAt(randomIndex);
-            obj.GetComponentInChildren<TextMeshPro>().text = "";
 
         });
 
