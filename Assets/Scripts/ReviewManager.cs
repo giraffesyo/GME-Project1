@@ -111,7 +111,6 @@ public class ReviewManager : MonoBehaviour
             threeWordsContainer.SetActive(true);
             threeObjectsContainer.SetActive(false);
 
-
             StartCoroutine(InitReviewButtons());
         }
         else if (randomMode == ReviewModes.ThreeObjects)
@@ -145,6 +144,7 @@ public class ReviewManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         // get the name of the fruit from the cloned prefab
         currentName = currentFood.name.Replace("(Clone)", "");
+        threeObjectsContainer.GetComponentInChildren<TextMeshProUGUI>().text = currentName;
 
         List<GameObject> temp = new List<GameObject>(objects);
         int currentFoodIndex = temp.FindIndex(obj => obj.name == currentName);
