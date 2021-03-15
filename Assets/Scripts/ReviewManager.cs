@@ -54,24 +54,32 @@ public class ReviewManager : MonoBehaviour
         {
             NextReviewQuestion();
         }
-        // if (currentMode == ReviewModes.ThreeObjects)
-        // {
-        //     if (Input.GetMouseButton(0))
-        //     {
-        //         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //         RaycastHit hit;
-        //         if (Physics.Raycast(ray, out hit))
-        //         {
-        //             Debug.Log(hit.transform.name);
-        //         }
-        //     }
-        // }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (currentMode == ReviewModes.ThreeObjects)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
+                {
+                    string answer = hit.transform.parent.name.Replace("(Clone)", "");
+                    CheckAnswer(answer);
+                }
+            }
+        }
     }
 
 
-    public void CheckAnswer(GameObject buttonText)
+    public void AnswerClicked(TextMeshProUGUI buttonText)
     {
-        if (currentName == buttonText.GetComponent<TextMeshProUGUI>().text)
+        string answer = buttonText.text;
+        CheckAnswer(answer);
+    }
+
+    public void CheckAnswer(string answer)
+    {
+        if (answer == currentName)
         {
             // TODO: they got it right, send message about their score for this item
             NextReviewQuestion();
@@ -82,7 +90,6 @@ public class ReviewManager : MonoBehaviour
             //TODO: possible todo: move it back one bucket
         }
     }
-
     public void NextReviewQuestion()
     {
         // get a random mode to switch to 
