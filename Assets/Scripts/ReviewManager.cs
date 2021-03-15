@@ -148,9 +148,7 @@ public class ReviewManager : MonoBehaviour
         List<Vector3> positions = new List<Vector3>() { new Vector3(transform.position.x + 5f, transform.position.y, transform.position.z), new Vector3(transform.position.x - 5f, transform.position.y, transform.position.z), transform.position };
         objectsToPlace.ForEach(obj =>
         {
-            //FIXME: the text blinks, we don't know why we cant stop it from blinking yet. below code does not work hence commented out @marechem please fix
-            // TextMeshProUGUI text = obj.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-            // text.text = "";
+            obj.GetComponentInChildren<TextMeshPro>().text = "";
             randomIndex = Random.Range(0, positions.Count);
             obj.transform.position = positions[randomIndex];
             positions.RemoveAt(randomIndex);
