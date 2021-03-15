@@ -33,47 +33,79 @@ public class play : MonoBehaviour
     private GameObject SpeechContainer;
     [SerializeField]
     private GameObject ThreeWordsContainer;
+    // TODO: If we setup player preferences we can load this from there
+    private bool shouldShowSwipeInstructions = false;
     private void Awake()
     {
 
     }
     void Start()
     {
+        SwipeDetector.OnSwipe += SwipeHandler;
         ReviewButtons.SetActive(false);
         currentFood = GameObject.Instantiate(objects[0], transform);
         maxIndex = objects.Count;
     }
 
 
+    private void AdvanceLearnItems(bool backwards = false)
+    {
+        if (backwards)
+        {
+            index--;
+            if (index < 0)
+            {
+                index = maxIndex - 1;
+            }
+
+            Destroy(currentFood);
+            currentFood = GameObject.Instantiate(objects[index], transform);
+        }
+        else
+        {
+            index++;
+            if (index >= maxIndex)
+            {
+                index = 0;
+            }
+
+            Destroy(currentFood);
+            currentFood = GameObject.Instantiate(objects[index], transform);
+        }
+    }
+
+    private void SwipeHandler(SwipeData swipe)
+    {
+        // we're only handling swipes inside the learn game mode right now
+        if (GameMode == GameModes.learn)
+        {
+
+            if (swipe.Direction == SwipeDirection.Right)
+            {
+                AdvanceLearnItems();
+            }
+            else if (swipe.Direction == SwipeDirection.Left)
+            {
+                AdvanceLearnItems(backwards: true);
+            }
+            // hide the instruction text 
+            shouldShowSwipeInstructions = false;
+            Instructions.SetActive(false);
+        }
+    }
+
     void Update()
     {
-
-
 
         if (GameMode == GameModes.learn)
         {
             if (Input.GetKeyDown(KeyCode.A))
             {
-                index--;
-                if (index < 0)
-                {
-                    index = maxIndex - 1;
-                }
-
-                Destroy(currentFood);
-                currentFood = GameObject.Instantiate(objects[index], transform);
-
+                AdvanceLearnItems(backwards: true);
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
-                index++;
-                if (index >= maxIndex)
-                {
-                    index = 0;
-                }
-
-                Destroy(currentFood);
-                currentFood = GameObject.Instantiate(objects[index], transform);
+                AdvanceLearnItems();
             }
         }
         else if (GameMode == GameModes.review)
@@ -165,7 +197,10 @@ public class play : MonoBehaviour
     {
         GameMode = GameModes.learn;
         ReviewButtons.SetActive(false);
-        Instructions.SetActive(true);
+        if (shouldShowSwipeInstructions)
+        {
+            Instructions.SetActive(true);
+        }
         Destroy(currentFood);
         currentFood = GameObject.Instantiate(objects[0], transform);
     }

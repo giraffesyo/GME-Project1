@@ -146,9 +146,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.DefaultCompany.GMEProject
     Standalone: com.DefaultCompany.GMEProject
-    iPhone: com.DefaultCompany.GMEProject
   buildNumber:
     Standalone: 0
     iPhone: 0
@@ -345,9 +343,9 @@ PlayerSettings:
   enableInternalProfiler: 0
   logObjCUncaughtExceptions: 1
   enableCrashReportAPI: 0
-  cameraUsageDescription: Uses camera for augmented reality
+  cameraUsageDescription: 
   locationUsageDescription: 
-  microphoneUsageDescription: Uses microphone for spoken word reviews
+  microphoneUsageDescription: 
   switchNMETAOverride: 
   switchNetLibKey: 
   switchSocketMemoryPoolSize: 6144
