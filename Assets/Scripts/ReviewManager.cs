@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-
 public enum ReviewModes
 {
     ThreeObjects,
@@ -20,6 +19,7 @@ public class ReviewManager : MonoBehaviour
     public int index = 0;
     private string currentName;
     public int maxIndex;
+    // private ReviewModes currentMode;
     private GameObject currentFood;
     [SerializeField]
     private GameObject threeObjectsContainer;
@@ -42,6 +42,7 @@ public class ReviewManager : MonoBehaviour
         maxIndex = objects.Count;
         reivewQueue = new List<GameObject>(objects);
         NextReviewQuestion();
+
     }
 
 
@@ -57,9 +58,21 @@ public class ReviewManager : MonoBehaviour
         if (GameObject.Find("Name"))
         {
             currentName = currentFood.name.Replace("(Clone)", "");
-            Destroy(GameObject.Find("Name"));
+            GameObject.Find("Name").GetComponent<TextMeshPro>().text = "";
 
         }
+        // if (currentMode == ReviewModes.ThreeObjects)
+        // {
+        //     if (Input.GetMouseButton(0))
+        //     {
+        //         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //         RaycastHit hit;
+        //         if (Physics.Raycast(ray, out hit))
+        //         {
+        //             Debug.Log(hit.transform.name);
+        //         }
+        //     }
+        // }
     }
 
 
@@ -83,7 +96,7 @@ public class ReviewManager : MonoBehaviour
         ReviewModes randomMode = (ReviewModes)Random.Range(0, numberOfReviewModes + 1);
         randomMode = ReviewModes.ThreeObjects;
         int randomObject = Random.Range(0, reivewQueue.Count);
-
+        // currentMode = randomMode;
         if (randomMode == ReviewModes.Speech)
         {
             speechContainer.SetActive(true);
@@ -148,10 +161,11 @@ public class ReviewManager : MonoBehaviour
         List<Vector3> positions = new List<Vector3>() { new Vector3(transform.position.x + 5f, transform.position.y, transform.position.z), new Vector3(transform.position.x - 5f, transform.position.y, transform.position.z), transform.position };
         objectsToPlace.ForEach(obj =>
         {
-            obj.GetComponentInChildren<TextMeshPro>().text = "";
             randomIndex = Random.Range(0, positions.Count);
             obj.transform.position = positions[randomIndex];
             positions.RemoveAt(randomIndex);
+            obj.GetComponentInChildren<TextMeshPro>().text = "";
+
         });
 
     }
