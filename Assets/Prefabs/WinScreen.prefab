@@ -82,6 +82,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &2612740955021107969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,6 +192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
+    m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -221,8 +223,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1689728079258547242}
-        m_TargetAssemblyTypeName: LoadManager, Assembly-CSharp
-        m_MethodName: load
+        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
+        m_MethodName: LoadScene
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -241,7 +243,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2322250606338216698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52faa93aee470d64c99798ecc6981d78, type: 3}
+  m_Script: {fileID: 11500000, guid: 35857fe66ce0e47519f176df98887e15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7061117003505278011
