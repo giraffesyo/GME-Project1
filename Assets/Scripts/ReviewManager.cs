@@ -103,7 +103,7 @@ public class ReviewManager : MonoBehaviour
 
         if (reivewQueue.Count <= 0)
         {
-            sceneLoader.LoadMainMenu();
+            sceneLoader.LoadScene("menu");
             return;
         }
 
