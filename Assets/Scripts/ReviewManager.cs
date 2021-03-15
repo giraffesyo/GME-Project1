@@ -94,7 +94,6 @@ public class ReviewManager : MonoBehaviour
     {
         // get a random mode to switch to 
         ReviewModes randomMode = (ReviewModes)Random.Range(0, numberOfReviewModes + 1);
-        randomMode = ReviewModes.ThreeObjects;
         int randomObject = Random.Range(0, reivewQueue.Count);
         currentMode = randomMode;
         if (randomMode == ReviewModes.Speech)
