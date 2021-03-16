@@ -1,19 +1,14 @@
-//
-// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE.md file in the project root for full license information.
-// I totally wrote all this code! - Richard
-//
-
 using UnityEngine;
-using UnityEngine.UI;
 using Microsoft.CognitiveServices.Speech;
 using System;
 using System.Collections;
 using Microsoft.CognitiveServices.Speech.Audio;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.CognitiveServices.Speech.Translation;
 using TMPro;
-
+using Button = UnityEngine.UI.Button;
 #if PLATFORM_ANDROID
 using UnityEngine.Android;
 #endif
@@ -28,18 +23,26 @@ public class SpeechRecognize : MonoBehaviour
     [SerializeField] private string SubscriptionRegion;
 
     private bool _micPermissionGranted = false;
+    private bool _processingAnswer = false;
+    private bool _processingService = false;
     public TextMeshProUGUI outputText;
+    private string _answer;
     public Button recoButton;
-    TranslationRecognizer _recognizer;
-    SpeechTranslationConfig _config;
-    AudioConfig _audioInput;
-    PushAudioInputStream _pushStream;
+    private TranslationRecognizer _translationRecognizer;
+    private SpeechRecognizer _speechRecognizer;
+    private KeywordRecognizer _keywordRecognizer;
+    private SpeechTranslationConfig _translationConfig;
+    private SpeechConfig _speechConfig;
+    private AudioConfig _audioInput;
+    private PushAudioInputStream _pushStream;
+    private ReviewManager _reviewManager;
 
     private readonly object _threadLocker = new object();
     private bool _recognitionStarted = false;
-    private string _message;
-    int _lastSample = 0;
-    AudioSource _audioSource;
+    private string _transcription;
+    private string _unfinishedTranscription;
+    private int _lastSample = 0;
+    private AudioSource _audioSource;
 
 #if PLATFORM_ANDROID || PLATFORM_IOS
     // Required to manifest microphone permission, cf.
@@ -63,70 +66,98 @@ public class SpeechRecognize : MonoBehaviour
         return bytes;
     }
 
-    private void RecognizingHandler(object sender, TranslationRecognitionEventArgs e)
+    private void SpeechRecognizingHandler(object sender, SpeechRecognitionEventArgs e)
     {
         lock (_threadLocker)
         {
-            _message = $"{e.Result.Text} \n {e.Result.Translations["en"]}";
-            Debug.Log("RecognizingHandler: " + _message);
+            _transcription = null;
+            _answer = null;
+            _unfinishedTranscription = Regex.Replace(e.Result.Text.Trim(), "\\p{P}+", "").ToLower();
         }
     }
 
-    private void RecognizedHandler(object sender, TranslationRecognitionEventArgs e)
+    private void SpeechRecognizedHandler(object sender, SpeechRecognitionEventArgs e)
     {
         lock (_threadLocker)
         {
-            _message = $"{e.Result.Text} \n {e.Result.Translations["en"]}";
-            Debug.Log("RecognizedHandler: " + _message);
+            _unfinishedTranscription = null;
+            _transcription = Regex.Replace(e.Result.Best().FirstOrDefault()?.LexicalForm.Trim() ?? "", "\\p{P}+", "").ToLower();
+            _answer = _transcription;
         }
+        
     }
 
-    private void CanceledHandler(object sender, TranslationRecognitionCanceledEventArgs e)
+    private void SpeechCanceledHandler(object sender, SpeechRecognitionCanceledEventArgs e)
     {
         lock (_threadLocker)
         {
-            _message = e.ErrorDetails.ToString();
-            Debug.Log("CanceledHandler: " + _message);
+            _unfinishedTranscription = null;
+            _transcription = e.ErrorDetails.ToString();
         }
     }
 
-    public async void OnPointerDown()
+    public void OnClick()
+    {
+        StartCoroutine(ToggleService());
+        if (!string.IsNullOrWhiteSpace(_answer))
+            StartCoroutine(SubmitAnswer());
+    }
+
+    IEnumerator ToggleService()
+    {
+        _processingService = true;
+        if (!_recognitionStarted)
+        {
+            StartStream();
+        }
+        else
+        {
+            StopStream();
+        }
+        yield return new WaitForSeconds(0.3f);
+        _processingService = false;
+    }
+
+    async void StartStream()
     {
         if (!Microphone.IsRecording(Microphone.devices[0]))
         {
-            Debug.Log("Microphone.Start: " + Microphone.devices[0]);
             _audioSource.clip = Microphone.Start(Microphone.devices[0], true, 200, 16000);
-            Debug.Log("audioSource.clip channels: " + _audioSource.clip.channels);
-            Debug.Log("audioSource.clip frequency: " + _audioSource.clip.frequency);
         }
-
-        await _recognizer.StartContinuousRecognitionAsync().ConfigureAwait(false);
+        await _speechRecognizer.StartContinuousRecognitionAsync().ConfigureAwait(false);
+            
         lock (_threadLocker)
         {
             _recognitionStarted = true;
-            Debug.Log("RecognitionStarted: " + _recognitionStarted.ToString());
         }
     }
 
-    public async void OnPointerUp()
+    async void StopStream()
     {
-        if (_recognitionStarted)
+        _unfinishedTranscription = null;
+        await _speechRecognizer.StopContinuousRecognitionAsync().ConfigureAwait(true);
+
+        if (Microphone.IsRecording(Microphone.devices[0]))
         {
-            await _recognizer.StopContinuousRecognitionAsync().ConfigureAwait(true);
-
-            if (Microphone.IsRecording(Microphone.devices[0]))
-            {
-                Debug.Log("Microphone.End: " + Microphone.devices[0]);
-                Microphone.End(null);
-                _lastSample = 0;
-            }
-
-            lock (_threadLocker)
-            {
-                _recognitionStarted = false;
-                Debug.Log("RecognitionStarted: " + _recognitionStarted.ToString());
-            }
+            Microphone.End(null);
+            _lastSample = 0;
         }
+
+        lock (_threadLocker)
+        {
+            _recognitionStarted = false;
+        }
+
+    }
+
+    IEnumerator SubmitAnswer()
+    {
+        // This is really just so users can see what's being submitted for their answer
+        _processingAnswer = true;
+        yield return new WaitForSeconds(0.75f);
+        FindObjectOfType<ReviewManager>().CheckAnswer(_answer);
+        _answer = null;
+        _processingAnswer = false;
     }
 
     void Start()
@@ -137,54 +168,64 @@ public class SpeechRecognize : MonoBehaviour
         }
         else if (recoButton == null)
         {
-            _message = "recoButton property is null! Assign a UI Button to it.";
-            UnityEngine.Debug.LogError(_message);
+            _unfinishedTranscription = "recoButton property is null! Assign a UI Button to it.";
         }
         else
         {
             // Continue with normal initialization, Text and Button objects are present.
+            ConfigureMicrophoneAccess();
+            ConfigureSpeechRecognizer();
+        }
+    }
+
+    void ConfigureMicrophoneAccess()
+    {
 #if PLATFORM_ANDROID
             // Request to use the microphone, cf.
             // https://docs.unity3d.com/Manual/android-RequestingPermissions.html
-            _message = "Waiting for mic permission";
             if (!Permission.HasUserAuthorizedPermission(Permission.Microphone))
             {
                 Permission.RequestUserPermission(Permission.Microphone);
             }
 #elif PLATFORM_IOS
-            if (!Application.HasUserAuthorization(UserAuthorization.Microphone))
-            {
-                Application.RequestUserAuthorization(UserAuthorization.Microphone);
-            }
+        if (!Application.HasUserAuthorization(UserAuthorization.Microphone))
+        {
+            Application.RequestUserAuthorization(UserAuthorization.Microphone);
+        }
 #else
             _micPermissionGranted = true;
-            _message = "Click button to recognize speech";
 #endif
-            _config = SpeechTranslationConfig.FromSubscription(SubscriptionKey, SubscriptionRegion);
-            _config.SpeechRecognitionLanguage = "es-US";
-            _config.AddTargetLanguage("en-US");
-            _pushStream = AudioInputStream.CreatePushStream();
-            _audioInput = AudioConfig.FromStreamInput(_pushStream);
-            _recognizer = new TranslationRecognizer(_config, _audioInput);
-            _recognizer.Recognizing += RecognizingHandler;
-            _recognizer.Recognized += RecognizedHandler;
-            _recognizer.Canceled += CanceledHandler;
 
-            foreach (var device in Microphone.devices)
-            {
-                Debug.Log("DeviceName: " + device);
-            }
-            _audioSource = GameObject.Find("AudioSource").GetComponent<AudioSource>();
-        }
     }
 
-    void Disable()
+    void ConfigureSpeechRecognizer()
     {
-        _recognizer.Recognizing -= RecognizingHandler;
-        _recognizer.Recognized -= RecognizedHandler;
-        _recognizer.Canceled -= CanceledHandler;
+        _speechConfig = SpeechConfig.FromSubscription(SubscriptionKey, SubscriptionRegion);
+        _speechConfig.SpeechRecognitionLanguage = "es-US";
+        _speechConfig.OutputFormat = OutputFormat.Detailed;
+        _pushStream = AudioInputStream.CreatePushStream();
+        _audioInput = AudioConfig.FromStreamInput(_pushStream);
+        _speechRecognizer = new SpeechRecognizer(_speechConfig, _audioInput);
+        _speechRecognizer.Recognizing += SpeechRecognizingHandler;
+        _speechRecognizer.Recognized += SpeechRecognizedHandler;
+        _speechRecognizer.Canceled += SpeechCanceledHandler;
+        _audioSource = GameObject.Find("AudioSource").GetComponent<AudioSource>();
+        _audioSource.loop = false;
+        _audioSource.playOnAwake = false;
+    }
+
+    void DisableSpeechRecognizer()
+    {
+        _speechRecognizer.Recognizing -= SpeechRecognizingHandler;
+        _speechRecognizer.Recognized -= SpeechRecognizedHandler;
+        _speechRecognizer.Canceled -= SpeechCanceledHandler;
         _pushStream.Close();
-        _recognizer.Dispose();
+        _speechRecognizer.Dispose();
+    }
+
+    void Dispose()
+    {
+        DisableSpeechRecognizer();
     }
 
     void FixedUpdate()
@@ -193,30 +234,44 @@ public class SpeechRecognize : MonoBehaviour
         if (!_micPermissionGranted && Permission.HasUserAuthorizedPermission(Permission.Microphone))
         {
             _micPermissionGranted = true;
-            _message = "Click button to recognize speech";
         }
 #elif PLATFORM_IOS
         if (!_micPermissionGranted && Application.HasUserAuthorization(UserAuthorization.Microphone))
         {
             _micPermissionGranted = true;
-            _message = "Click button to recognize speech";
         }
 #endif
         lock (_threadLocker)
         {
             if (recoButton != null)
             {
-                recoButton.interactable = _micPermissionGranted;
+                recoButton.interactable = _micPermissionGranted && !_processingService && !_processingAnswer;
             }
-            if (outputText != null)
+            if (outputText != null && _recognitionStarted)
             {
-                outputText.text = _message;
+                if (string.IsNullOrWhiteSpace(_transcription) && string.IsNullOrWhiteSpace(_answer))
+                {
+                    outputText.text = _unfinishedTranscription;
+                    outputText.color = Color.red;
+                    recoButton.image.color = Color.red;
+                    recoButton.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+                    recoButton.GetComponentInChildren<TextMeshProUGUI>().text = "Listening...";
+                }
+                else if (!string.IsNullOrWhiteSpace(_transcription))
+                {
+                    _transcription = null;
+                    recoButton.onClick.Invoke();
+                }
+                else
+                {
+                    outputText.text = _answer;
+                    outputText.color = Color.white;
+                }
             }
         }
 
-        if (Microphone.IsRecording(Microphone.devices[0]) && _recognitionStarted == true)
+        if (Microphone.IsRecording(Microphone.devices[0]) && _recognitionStarted)
         {
-            recoButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Stop";
             int pos = Microphone.GetPosition(Microphone.devices[0]);
             int diff = pos - _lastSample;
 
@@ -227,15 +282,18 @@ public class SpeechRecognize : MonoBehaviour
                 byte[] ba = ConvertAudioClipDataToInt16ByteArray(samples);
                 if (ba.Length != 0)
                 {
-                    Debug.Log("pushStream.Write pos:" + Microphone.GetPosition(Microphone.devices[0]).ToString() + " length: " + ba.Length.ToString());
                     _pushStream.Write(ba);
                 }
             }
             _lastSample = pos;
         }
-        else if (!Microphone.IsRecording(Microphone.devices[0]) && _recognitionStarted == false)
+        else if (!Microphone.IsRecording(Microphone.devices[0]) && !_recognitionStarted)
         {
-            recoButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Start";
+            outputText.text = _processingAnswer ? _answer : "";
+            outputText.color = Color.white;
+            recoButton.image.color = _processingAnswer ? Color.red : Color.white;
+            recoButton.GetComponentInChildren<TextMeshProUGUI>().color = _processingAnswer ? Color.white : Color.black;
+            recoButton.GetComponentInChildren<TextMeshProUGUI>().text = _processingAnswer ? "Checking..." : "Press and say the word";
         }
     }
 }
