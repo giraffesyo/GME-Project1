@@ -794,6 +794,7 @@ GameObject:
   - component: {fileID: 818555892}
   - component: {fileID: 818555891}
   - component: {fileID: 818555890}
+  - component: {fileID: 818555893}
   m_Layer: 5
   m_Name: Login Button
   m_TagString: Untagged
@@ -903,6 +904,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 818555888}
   m_CullTransparentMesh: 1
+--- !u!114 &818555893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818555888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d0a20aac8b7e4a78bd7183b37aed530, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  usernameField: {fileID: 1604699449}
 --- !u!1 &944428951
 GameObject:
   m_ObjectHideFlags: 0
@@ -915,7 +929,7 @@ GameObject:
   - component: {fileID: 944428954}
   - component: {fileID: 944428953}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Login Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1151,7 +1165,7 @@ GameObject:
   - component: {fileID: 1604699450}
   - component: {fileID: 1604699449}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Input Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1230,7 +1244,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
