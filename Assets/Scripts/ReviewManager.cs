@@ -33,12 +33,11 @@ public class ReviewManager : MonoBehaviour
 
     private List<GameObject> reivewQueue;
 
-    public SceneLoader sceneLoader;
+
 
     void Start()
     {
         // ReviewButtons.SetActive(false);
-        sceneLoader = GetComponent<SceneLoader>();
         maxIndex = objects.Count;
         reivewQueue = new List<GameObject>(objects);
         NextReviewQuestion();
@@ -123,7 +122,7 @@ public class ReviewManager : MonoBehaviour
 
         if (reivewQueue.Count <= 0)
         {
-            sceneLoader.LoadScene("menu");
+            SceneLoader.LoadScene("menu");
             return;
         }
 
