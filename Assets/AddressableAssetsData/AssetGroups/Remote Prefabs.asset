@@ -22,6 +22,26 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - remote
+    - learning_objects
+    - prefabs
+    m_MainAsset: {fileID: 102900000, guid: dcfe936305ce1f2488defe8142c533f9, type: 3}
+    m_TargetAsset: {fileID: 102900000, guid: dcfe936305ce1f2488defe8142c533f9, type: 3}
+  - m_GUID: b982a5e4b0b25cb46904afc30c3054a1
+    m_Address: Assets/Prefabs/ProjectilePrefabs/playerprojectiles
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote
+    - prefabs
+    - player_projectiles
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
+  - m_GUID: 4957197b079083a4dbe7fa1eecc67799
+    m_Address: Assets/Prefabs/ProjectilePrefabs/bossprojectiles
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - remote
+    - prefabs
+    - boss_projectiles
     m_MainAsset: {fileID: 0}
     m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0

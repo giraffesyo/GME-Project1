@@ -86,6 +86,9 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - remote
+    - learning_objects
+    - boss_projectiles
+    - player_projectiles
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: a1e2d5ebce9d27449be19bab6f0a5c05, type: 2}

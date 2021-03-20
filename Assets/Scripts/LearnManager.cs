@@ -6,7 +6,7 @@ using TMPro;
 public class LearnManager : MonoBehaviour
 {
 
-    public List<GameObject> objects;
+    private List<GameObject> objects;
     public List<string> objectNames;
 
 
@@ -24,7 +24,7 @@ public class LearnManager : MonoBehaviour
     {
         SwipeDetector.OnSwipe += SwipeHandler;
         // ReviewButtons.SetActive(false);
-        objects = RemoteAssetLoader.Instance.Assets;
+        objects = RemoteAssetLoader.Instance.GetAssets(AssetLabels.LearningObjects);
         currentFood = GameObject.Instantiate(objects[0], transform);
         currentFood.GetComponentInChildren<TextMeshPro>().text = currentFood.name.Replace("(Clone)", "");
 
