@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 9ba366b48355d2b409757a9da3f9157a
+  m_SerializeEntries:
+  - m_GUID: a3f0f027d718dfd44bc9c26e33120d20
+    m_Address: Assets/Prefabs/ObjectsPrefabs
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    m_MainAsset: {fileID: 102900000, guid: a3f0f027d718dfd44bc9c26e33120d20, type: 3}
+    m_TargetAsset: {fileID: 102900000, guid: a3f0f027d718dfd44bc9c26e33120d20, type: 3}
+  - m_GUID: 825b30c0ba9eea34a8636a650202498a
+    m_Address: Assets/Prefabs/ProjectilePrefabs
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    m_MainAsset: {fileID: 102900000, guid: 825b30c0ba9eea34a8636a650202498a, type: 3}
+    m_TargetAsset: {fileID: 102900000, guid: 825b30c0ba9eea34a8636a650202498a, type: 3}
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 20b8bc822b6c7324dafa0987cc6cb965, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: d5accc5c1e6ffe64f9ad6b1598bfa7b5, type: 2}
+    - {fileID: 11400000, guid: 21a7b4f0fe79bd7439517da88c95157e, type: 2}

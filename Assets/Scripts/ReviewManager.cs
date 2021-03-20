@@ -34,10 +34,10 @@ public class ReviewManager : MonoBehaviour
     private List<GameObject> reivewQueue;
 
 
-
     void Start()
     {
         // ReviewButtons.SetActive(false);
+        objects = RemoteAssetLoader.Instance.Assets;
         maxIndex = objects.Count;
         reivewQueue = new List<GameObject>(objects);
         NextReviewQuestion();

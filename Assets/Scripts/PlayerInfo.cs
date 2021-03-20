@@ -21,7 +21,7 @@ public class PlayerInfo : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "Splash")
         {
             // TODO: We can put our team logo on this and load the new scene after 1-2 seconds
-
+            
             if (string.IsNullOrWhiteSpace(username))
             {
                 // no player found, send to login

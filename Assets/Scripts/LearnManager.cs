@@ -24,6 +24,7 @@ public class LearnManager : MonoBehaviour
     {
         SwipeDetector.OnSwipe += SwipeHandler;
         // ReviewButtons.SetActive(false);
+        objects = RemoteAssetLoader.Instance.Assets;
         currentFood = GameObject.Instantiate(objects[0], transform);
         currentFood.GetComponentInChildren<TextMeshPro>().text = currentFood.name.Replace("(Clone)", "");
 
