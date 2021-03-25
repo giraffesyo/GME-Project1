@@ -17,7 +17,7 @@ session = boto3.session.Session(aws_access_key_id=ACCESS_KEY,
 dynamodb = session.resource('dynamodb')
 table = dynamodb.Table('Scores')
 s3_client = session.client('s3')
-s3_client.create_bucket(Bucket=S3_BUCKET)
+# s3_client.create_bucket(Bucket=S3_BUCKET)
 
 app = Flask(__name__)
 
