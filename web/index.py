@@ -1,9 +1,17 @@
+from flask import Flask, jsonify, request, abort
 import boto3
+import os
 from botocore.exceptions import ClientError
 
-from flask import Flask, jsonify, request, abort
+ACCESS_KEY = os.environ['MOONSPEAK_ACCESS_KEY']
+SECRET_KEY = os.environ['MOONSPEAK_SECRET_KEY']
 
-dynamodb = boto3.resource('dynamodb')
+
+dynamodb = boto3.client('dynamodb', aws_access_key_id=ACCESS_KEY,
+                        aws_secret_access_key=SECRET_KEY
+                        )
+
+#dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('Scores')
 
 app = Flask(__name__)
