@@ -155,13 +155,18 @@ def upload_file():
     return '''
     <!doctype html>
     <title>Upload new asset build</title>
-    <h1>Upload file</h1>
+    <h1>Upload bundled assets</h1>
     <form method=post enctype=multipart/form-data>
+      <label for=buildtarget>Build target:</label>
       <select name=buildtarget>
         <option value=iOS>iOS</option>
         <option value=StandaloneWindows64>Windows x64</option>
       </select>
+      <br />
+      <br />
       <input type=file name=file multiple>
+      <br />
+      <br />
       <input type=submit value=Upload>
     </form>
     '''
