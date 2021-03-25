@@ -38,7 +38,7 @@ public class PlayerInfo : MonoBehaviour
         return user;
     }
 
-    void Awake()
+    async void Awake()
     {
         Debug.Log("hi");
         playerInfo = this;
@@ -48,6 +48,7 @@ public class PlayerInfo : MonoBehaviour
         // username = PlayerPrefs.GetString("username");
 
         // if we're on the splash screen, move to the right scene based on if we're logged in
+        await RemoteAssetLoader.Instance.LoadAllAssets();
         if (SceneManager.GetActiveScene().name == "Splash")
         {
             // TODO: We can put our team logo on this and load the new scene after 1-2 seconds
