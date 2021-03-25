@@ -39,41 +39,42 @@ def postScores():
     # Get User
     try:
         response = table.get_item(Key={'username': username})
+        userExists = 'Item' in response
+
+        # User exists in DB
+        if userExists:
+            user = response['Item']
+
+        # User does not exist in DB, create user
+        else:
+            user = {'username': username, 'scores': {}}
+
+        # Combine incoming user scores with current user scores
+        scores = incoming['scores']
+
+        for key, value in scores.items():
+            user['scores'][key] = value
+
+        # Post to DB
+        if userExists:
+            try:
+                response = table.update_item(
+                    Key={'username': user['username']},
+                    UpdateExpression='set scores=:s',
+                    ExpressionAttributeValues={':s': user['scores']})
+            except ClientError as e:
+                print('Error updating user!', e)
+        else:
+            try:
+                response = table.put_item(Item=user)
+            except ClientError as e:
+                print('Error creating user!', e)
+
+        return response
+
     except ClientError as e:
         print('Error fetching user!', e)
-
-    userExists = 'Item' in response
-
-    # User exists in DB
-    if userExists:
-        user = response['Item']
-
-    # User does not exist in DB, create user
-    else:
-        user = {'username': username, 'scores': {}}
-
-    # Combine incoming user scores with current user scores
-    scores = incoming['scores']
-
-    for key, value in scores.items():
-        user['scores'][key] = value
-
-    # Post to DB
-    if userExists:
-        try:
-            response = table.update_item(
-                Key={'username': user['username']},
-                UpdateExpression='set scores=:s',
-                ExpressionAttributeValues={':s': user['scores']})
-        except ClientError as e:
-            print('Error updating user!', e)
-    else:
-        try:
-            response = table.put_item(Item=user)
-        except ClientError as e:
-            print('Error creating user!', e)
-
-    return response
+        return redirect('/')
 
 # Fetches user information
 # If username does not exist in DB, create user
@@ -85,15 +86,14 @@ def getUserInfo(username):
 
     try:
         response = table.get_item(Key={'username': username})
+        # User exists in DB
+        if 'Item' in response:
+            user = response['Item']
+            for key, value in user['scores'].items():
+                user['scores'][key] = int(value)
+            return jsonify(user)
     except ClientError as e:
         print('Error fetching user!', e)
-
-    # User exists in DB
-    if 'Item' in response:
-        user = response['Item']
-        for key, value in user['scores'].items():
-            user['scores'][key] = int(value)
-        return jsonify(user)
 
     # User does not exist in DB, create user
     user = {'username': username, 'scores': {}}
