@@ -26,11 +26,11 @@ public class PlayerInfo : MonoBehaviour
 {
     public static PlayerInfo playerInfo;
     public string username;
-    private User user;
+    public User user;
 
     private static User getUser(string username) {
         User user = null;
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace($"http://127.0.0.1:5000/user/{username}", @"[^\x00-\x7F]+", ""));
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace($"https://moonspeak-giraffesyo.vercel.app/user/{username}", @"[^\x00-\x7F]+", ""));
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
         StreamReader readStream = new StreamReader(response.GetResponseStream());
         string jsonResponse = readStream.ReadToEnd();
@@ -83,8 +83,10 @@ public class PlayerInfo : MonoBehaviour
 
     public void PostDB() {
         if (user == null) return;
+        if (user.scores == null) return;
+        if (string.IsNullOrWhiteSpace( user.username )) return;
 
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace("http://127.0.0.1:5000/user/", @"[^\x00-\x7F]+", ""));
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace("https://moonspeak-giraffesyo.vercel.app/user/", @"[^\x00-\x7F]+", ""));
         request.ContentType = "application/json; charset=utf-8";
         request.Method = "POST";
 

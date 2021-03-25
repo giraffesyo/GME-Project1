@@ -1663,11 +1663,11 @@ RectTransform:
   m_Father: {fileID: 1079426281}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -342.27313, y: 226.1}
-  m_SizeDelta: {x: 115.4526, y: 29.3932}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 17.1, y: -15}
+  m_SizeDelta: {x: 115.45261, y: 29.393204}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &1179306791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2135,14 +2135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33b64269ede7459438f5f680dfd46ffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objects:
-  - {fileID: 2331705609373186659, guid: b0005c762f87b22408a5e7c428e2afe0, type: 3}
-  - {fileID: 2331705609373186659, guid: 35fa767b3369ebe4caec2b6b2571c8a1, type: 3}
-  - {fileID: 2331705609373186659, guid: 2116a2192f3ae4a43ada97831fe3320b, type: 3}
-  - {fileID: 2331705609373186659, guid: ecb3b4b383500f14da26225639af5870, type: 3}
-  - {fileID: 2331705609373186659, guid: 1df54ea01919a5f4c8a636eea7be2256, type: 3}
-  - {fileID: 2331705609373186659, guid: f25cfe57ecd8fe941a03473909994644, type: 3}
-  - {fileID: 2331705609373186659, guid: e0aed6d5db2f4e14eb435d9432b89e06, type: 3}
   objectNames:
   - manzana
   - aguacate
