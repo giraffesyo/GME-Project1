@@ -79,7 +79,6 @@ def postScores():
 # Fetches user information
 # If username does not exist in DB, create user
 
-
 @app.route('/user/<username>', methods=['GET'])
 def getUserInfo(username):
     username = username.strip()
@@ -128,6 +127,20 @@ def get_from_s3(filename, bucket):
     except ClientError as e:
         print(f'Error downloading from s3 {e}')
         return None
+
+# List all files in bucket
+@app.route('/files', methods=['GET'])
+def listFiles():
+    try:
+        response = s3_client.list_objects(Bucket=S3_BUCKET)
+        all_file_names = "<h1>Bucket Contents</h1><div>"
+        for file in response['Contents']:
+            name = file['Key']
+            all_file_names += f'<p>{name}</p>'
+        all_file_names += "</div>"
+        return all_file_names
+    except ClientError as e:
+        print(f)
 
 # Get the asset files from wherever its being hosted
 @app.route('/assets', methods=['GET'])
