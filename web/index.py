@@ -79,7 +79,6 @@ def postScores():
 # Fetches user information
 # If username does not exist in DB, create user
 
-
 @app.route('/user/<username>', methods=['GET'])
 def getUserInfo(username):
     username = username.strip()
@@ -129,15 +128,31 @@ def get_from_s3(filename, bucket):
         print(f'Error downloading from s3 {e}')
         return None
 
+def listFiles():
+    try:
+        response = s3_client.list_objects(Bucket=S3_BUCKET)
+        all_file_names = "<h1>Bucket Contents</h1><div>"
+        for file in response['Contents']:
+            name = file['Key']
+            all_file_names += f'<p>{name}</p>'
+        all_file_names += "</div>"
+        return all_file_names
+    except ClientError as e:
+        print(f)
+
 # Get the asset files from wherever its being hosted
 @app.route('/assets', methods=['GET'])
 def getFile():
     try:
-        filename = request.args.get('filename')
-        file = get_from_s3(filename, S3_BUCKET)
-        print(file)
-        # return send_file(os.path.join(os.getcwd(), 'assets/' + filename), as_attachment=True, attachment_filename=filename)
-        return send_file(file, mimetype="text/plain", as_attachment=True, attachment_filename=filename)
+        if 'filename' in request.args:
+            filename = request.args.get('filename')
+            file = get_from_s3(filename, S3_BUCKET)
+            print(file)
+            # return send_file(os.path.join(os.getcwd(), 'assets/' + filename), as_attachment=True, attachment_filename=filename)
+            return send_file(file, mimetype="text/plain", as_attachment=True, attachment_filename=filename)
+
+        all_files = listFiles()
+        return all_files
     except FileNotFoundError:
         abort(404)
 
