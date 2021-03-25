@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, abort
+from flask import Flask, jsonify, request, abort, send_from_directory, send_file
 import boto3
 import os
 from botocore.exceptions import ClientError
@@ -70,8 +70,8 @@ def postScores():
 
     return response
 
-# Fetches user information
-# If username does not exist in DB, create user
+Fetches user information
+If username does not exist in DB, create user
 
 
 @app.route('/user/<username>', methods=['GET'])
@@ -98,6 +98,10 @@ def getUserInfo(username):
         print('Error creating user!', e)
     return jsonify(user)
 
-@app.route('/assets/<filename>', methods=['GET'])
-def getFile(filename):
-    print(filename)
+@app.route('/assets', methods=['GET'])
+def getFile():
+    try:
+        filename = request.args.get('filename')
+        return send_file(os.path.join(os.getcwd(), 'assets/' + filename))
+    except FileNotFoundError:
+        abort(404)

@@ -64,7 +64,7 @@ MonoBehaviour:
       - m_Id: 8281405a0ae7ed04a9fff9df53307e2e
         m_Value: ServerData/[BuildTarget]
       - m_Id: b3ebe3f19c310f84db3a8fae1b920784
-        m_Value: https://arlearningapp.blob.core.windows.net/assets/[BuildTarget]
+        m_Value: https://moonspeak-q0thqsqpa-richard-paredes.vercel.app/assets?filename=[BuildTarget]
     - m_InheritedParent: 
       m_Id: a781446be48c28a468ceb1b810491a50
       m_ProfileName: VercelAPI
@@ -72,13 +72,13 @@ MonoBehaviour:
       - m_Id: 818d819d6d54caa49b6d158ca4499179
         m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
       - m_Id: d23aa226156bae04bb9049926724e911
-        m_Value: ../web/assets/[BuildTarget]
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
       - m_Id: b64cc691473611a4f85d359c21bc8d10
-        m_Value: http://localhost:3000/assets/[BuildTarget]
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: 8281405a0ae7ed04a9fff9df53307e2e
         m_Value: ../web/assets/[BuildTarget]
       - m_Id: b3ebe3f19c310f84db3a8fae1b920784
-        m_Value: http://localhost:3000/assets/[BuildTarget]
+        m_Value: https://moonspeak.giraffesyo.dev/assets?filename=[BuildTarget]
     m_ProfileEntryNames:
     - m_Id: 818d819d6d54caa49b6d158ca4499179
       m_Name: BuildTarget

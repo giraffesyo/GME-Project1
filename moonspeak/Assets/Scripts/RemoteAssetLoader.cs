@@ -36,6 +36,7 @@ public class RemoteAssetLoader : MonoBehaviour
     private async Task LoadAndStoreAssets(string label)
     {
         var locations = await Addressables.LoadResourceLocationsAsync(label).Task;
+        Debug.Log(Addressables.RuntimePath);
         List<GameObject> assets = new List<GameObject>();
         foreach (var location in locations)
         {
