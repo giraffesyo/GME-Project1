@@ -81,12 +81,14 @@ public class ReviewManager : MonoBehaviour
         if (answer == currentName)
         {
             // TODO: they got it right, send message about their score for this item
+            PlayerInfo.playerInfo.UpdateScore(answer, 1);
             NextReviewQuestion();
         }
         else
         {
             // FIXME: they got it wrong, show it agin later, show the right answer 
             //TODO: possible todo: move it back one bucket
+            PlayerInfo.playerInfo.UpdateScore(currentName, -1);
         }
     }
     public void NextReviewQuestion()
