@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request, abort, send_from_directory, send_file
+from flask import Flask, jsonify, request, abort, send_file, flash
+from werkzeug.utils import secure_filename
 import boto3
 import os
 from botocore.exceptions import ClientError
@@ -98,6 +99,9 @@ def getUserInfo(username):
         print('Error creating user!', e)
     return jsonify(user)
 
+
+# Get the asset files from Vercel
+# TODO: We can change it to hit an S3 bucket or something else
 @app.route('/assets', methods=['GET'])
 def getFile():
     try:
@@ -105,3 +109,40 @@ def getFile():
         return send_file(os.path.join(os.getcwd(), 'assets/' + filename))
     except FileNotFoundError:
         abort(404)
+
+@app.route('/uploads', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        files = request.files.getlist('file')
+        upload_folder = request.form.get('buildtarget', 'iOS')
+        if len(files) == 0:
+            return redirect(request.url)
+        if all(allowed_file(file.filename) for file in files):
+            for file in files:
+                save_file(upload_folder, file)
+            return redirect('/')
+    return '''
+    <!doctype html>
+    <title>Upload new asset build</title>
+    <h1>Upload file</h1>
+    <form method=post enctype=multipart/form-data>
+      <select name=buildtarget>
+        <option value=iOS>iOS</option>
+        <option value=StandaloneWindows64>Windows x64</option>
+      </select>
+      <input type=file name=file multiple>
+      <input type=submit value=Upload>
+    </form>
+    '''
+
+def allowed_file(filename):
+    return '.' in filename and \
+            filename.rsplit('.', 1)[1].lower() in { 'hash', 'json', 'bundle' }
+
+# fails cause vercel is read-only
+def save_file(upload_folder, file):
+    filename = secure_filename(file.filename)
+    upload_path = os.path.join(os.getcwd(), f'assets/{upload_folder}')
+    if not os.path.exists(upload_path):
+        os.makedirs(upload_path)
+    file.save(f'{upload_path}/{filename}')
