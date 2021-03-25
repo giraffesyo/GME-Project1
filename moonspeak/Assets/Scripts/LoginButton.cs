@@ -18,7 +18,7 @@ public class LoginButton : MonoBehaviour
     private void login()
     {
         string username = usernameField.text.Trim();
-        PlayerInfo.playerInfo.SetPlayer(username);
+        // PlayerInfo.playerInfo.SetPlayer(username);
         SceneLoader.LoadScene("menu");
     }
     

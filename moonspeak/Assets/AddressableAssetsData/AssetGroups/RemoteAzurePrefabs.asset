@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Default Local Group
+  m_Name: RemoteAzurePrefabs
   m_EditorClassIdentifier: 
-  m_GroupName: Default Local Group
+  m_GroupName: RemoteAzurePrefabs
   m_Data:
     m_SerializedData: []
-  m_GUID: 9ba366b48355d2b409757a9da3f9157a
+  m_GUID: 470a32f8dc3d559479d83c5d3a5c2b0e
   m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 20b8bc822b6c7324dafa0987cc6cb965, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: d5accc5c1e6ffe64f9ad6b1598bfa7b5, type: 2}
-    - {fileID: 11400000, guid: 21a7b4f0fe79bd7439517da88c95157e, type: 2}
+    - {fileID: 11400000, guid: 322a7b29e64f21641b35a4d5c64f80f3, type: 2}
+    - {fileID: 11400000, guid: 084b2f8937df288448a6fbfbed7409c0, type: 2}

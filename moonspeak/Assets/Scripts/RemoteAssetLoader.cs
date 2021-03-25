@@ -26,11 +26,6 @@ public class RemoteAssetLoader : MonoBehaviour
         DontDestroyOnLoad(Instance);
     }
 
-    private async void Start()
-    {
-        // await LoadAllAssets();
-    }
-
     public async Task LoadAllAssets()
     {
         await LoadAndStoreAssets(AssetLabels.LearningObjects);

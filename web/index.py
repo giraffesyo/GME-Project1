@@ -97,3 +97,7 @@ def getUserInfo(username):
     except ClientError as e:
         print('Error creating user!', e)
     return jsonify(user)
+
+@app.route('/assets/<filename>', methods=['GET'])
+def getFile(filename):
+    print(filename)
