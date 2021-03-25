@@ -101,7 +101,8 @@ def getUserInfo(username):
 
 
 # Get the asset files from Vercel
-# TODO: We can change it to hit an S3 bucket or something else
+# TODO: We can change it to hit an S3 bucket instead
+# https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-examples.html
 @app.route('/assets', methods=['GET'])
 def getFile():
     try:
