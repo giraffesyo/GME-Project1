@@ -7,7 +7,7 @@ from botocore.exceptions import ClientError
 
 ACCESS_KEY = os.environ['MOONSPEAK_ACCESS_KEY']
 SECRET_KEY = os.environ['MOONSPEAK_SECRET_KEY']
-S3_BUCKET = "moonspeak" # idk whatever works
+S3_BUCKET = "gmemoonspeak" # idk whatever works
 
 
 session = boto3.session.Session(aws_access_key_id=ACCESS_KEY,
