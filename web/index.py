@@ -11,7 +11,7 @@ S3_BUCKET = "moonspeaks" # idk whatever works
 
 
 session = boto3.session.Session(aws_access_key_id=ACCESS_KEY,
-                                aws_secret_access_key=SECRET_KEY,
+                                aws_secret_access_key=SECRET_KEY
                                 )
 
 dynamodb = session.resource('dynamodb')
