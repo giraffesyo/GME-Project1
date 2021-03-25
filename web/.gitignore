@@ -151,3 +151,6 @@ Thumbs.db #thumbnail cache on Windows
 
 # End of https://www.toptal.com/developers/gitignore/api/python
 .vercel
+
+# Generated asset bundles used to remote load assets in Unity build
+assets/**/*

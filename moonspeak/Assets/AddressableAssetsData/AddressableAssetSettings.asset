@@ -62,7 +62,7 @@ MonoBehaviour:
       - m_Id: b64cc691473611a4f85d359c21bc8d10
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: 8281405a0ae7ed04a9fff9df53307e2e
-        m_Value: ServerData/[BuildTarget]
+        m_Value: ../web/assets/[BuildTarget]
       - m_Id: b3ebe3f19c310f84db3a8fae1b920784
         m_Value: https://moonspeak-q0thqsqpa-richard-paredes.vercel.app/assets?filename=[BuildTarget]
     - m_InheritedParent: 

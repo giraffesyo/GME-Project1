@@ -1,19 +1,24 @@
-from flask import Flask, jsonify, request, abort, send_file, flash
+from flask import Flask, jsonify, request, abort, send_file, flash, redirect
 from werkzeug.utils import secure_filename
+from io import BytesIO
 import boto3
 import os
 from botocore.exceptions import ClientError
 
 ACCESS_KEY = os.environ['MOONSPEAK_ACCESS_KEY']
 SECRET_KEY = os.environ['MOONSPEAK_SECRET_KEY']
+S3_BUCKET = "moonspeaks" # idk whatever works
 
 
 session = boto3.session.Session(aws_access_key_id=ACCESS_KEY,
-                                aws_secret_access_key=SECRET_KEY
+                                aws_secret_access_key=SECRET_KEY,
+                                aws_session_token=SESSION
                                 )
 
-dynamodb = session.resource('dynamodb')
+dynamodb = session.resource('dynamodb', region_name='us-west-2')
 table = dynamodb.Table('Scores')
+s3_client = session.client('s3')
+s3_client.create_bucket(Bucket=S3_BUCKET)
 
 app = Flask(__name__)
 
@@ -99,15 +104,41 @@ def getUserInfo(username):
         print('Error creating user!', e)
     return jsonify(user)
 
-
-# Get the asset files from Vercel
-# TODO: We can change it to hit an S3 bucket instead
+# TODO: ensure this works...
 # https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-examples.html
+def upload_to_s3(upload_folder, file, bucket, acl="public-read"):
+    try:
+        s3_client.upload_fileobj(
+            file,
+            bucket,
+            f'{upload_folder}/{file.filename}',
+            ExtraArgs = {
+                "ACL": acl,
+                "ContentType": file.content_type
+            }
+        )
+    except ClientError as e:
+        print(f'Error downloading from s3 {e}')
+        return False
+    return True
+
+def get_from_s3(filename, bucket):
+    try:
+        file = s3_client.get_object(Bucket=bucket, Key=filename)
+        return file['Body']
+    except ClientError as e:
+        print(f'Error downloading from s3 {e}')
+        return None
+
+# Get the asset files from wherever its being hosted
 @app.route('/assets', methods=['GET'])
 def getFile():
     try:
         filename = request.args.get('filename')
-        return send_file(os.path.join(os.getcwd(), 'assets/' + filename))
+        file = get_from_s3(filename, S3_BUCKET)
+        print(file)
+        # return send_file(os.path.join(os.getcwd(), 'assets/' + filename), as_attachment=True, attachment_filename=filename)
+        return send_file(file, mimetype="text/plain", as_attachment=True, attachment_filename=filename)
     except FileNotFoundError:
         abort(404)
 
@@ -120,7 +151,7 @@ def upload_file():
             return redirect(request.url)
         if all(allowed_file(file.filename) for file in files):
             for file in files:
-                save_file(upload_folder, file)
+                upload_to_s3(upload_folder, file, S3_BUCKET)
             return redirect('/')
     return '''
     <!doctype html>
