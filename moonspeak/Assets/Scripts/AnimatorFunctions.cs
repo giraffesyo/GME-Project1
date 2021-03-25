@@ -1,6 +1,8 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine;
+using TMPro;
 
 public class AnimatorFunctions : MonoBehaviour
 {
@@ -15,3 +17,4 @@ public class AnimatorFunctions : MonoBehaviour
 		}
 	}
 }	
+ 
