@@ -128,8 +128,6 @@ def get_from_s3(filename, bucket):
         print(f'Error downloading from s3 {e}')
         return None
 
-# List all files in bucket
-@app.route('/files', methods=['GET'])
 def listFiles():
     try:
         response = s3_client.list_objects(Bucket=S3_BUCKET)
@@ -146,11 +144,15 @@ def listFiles():
 @app.route('/assets', methods=['GET'])
 def getFile():
     try:
-        filename = request.args.get('filename')
-        file = get_from_s3(filename, S3_BUCKET)
-        print(file)
-        # return send_file(os.path.join(os.getcwd(), 'assets/' + filename), as_attachment=True, attachment_filename=filename)
-        return send_file(file, mimetype="text/plain", as_attachment=True, attachment_filename=filename)
+        if 'filename' in request.args:
+            filename = request.args.get('filename')
+            file = get_from_s3(filename, S3_BUCKET)
+            print(file)
+            # return send_file(os.path.join(os.getcwd(), 'assets/' + filename), as_attachment=True, attachment_filename=filename)
+            return send_file(file, mimetype="text/plain", as_attachment=True, attachment_filename=filename)
+
+        all_files = listFiles()
+        return all_files
     except FileNotFoundError:
         abort(404)
 
