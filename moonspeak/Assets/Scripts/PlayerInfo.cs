@@ -10,14 +10,16 @@ using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 
 [Serializable]
-public class User {
+public class User
+{
     public string username { get; set; }
     public Dictionary<string, int> scores { get; set; }
-    public override string ToString() {
+    public override string ToString()
+    {
         string output = username + "\n";
         if (scores == null) scores = new Dictionary<string, int>();
         if (scores.Count == 0) return output + "Scores is Empty!\n";
-        foreach ( KeyValuePair<string, int> kvp in scores ) output += $" - {kvp.Key}: {kvp.Value}\n";
+        foreach (KeyValuePair<string, int> kvp in scores) output += $" - {kvp.Key}: {kvp.Value}\n";
         return output;
     }
 }
@@ -28,7 +30,8 @@ public class PlayerInfo : MonoBehaviour
     public string username;
     public User user;
 
-    private static User getUser(string username) {
+    private static User getUser(string username)
+    {
         User user = null;
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace($"https://moonspeak-giraffesyo.vercel.app/user/{username}", @"[^\x00-\x7F]+", ""));
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -45,7 +48,8 @@ public class PlayerInfo : MonoBehaviour
 
         DontDestroyOnLoad(this);
         username = "";
-        // username = PlayerPrefs.GetString("username");
+        // comment out below line to force login everytime
+        username = PlayerPrefs.GetString("username");
 
         // if we're on the splash screen, move to the right scene based on if we're logged in
         await RemoteAssetLoader.Instance.LoadAllAssets();
@@ -74,17 +78,19 @@ public class PlayerInfo : MonoBehaviour
         Debug.Log(user.ToString());
     }
 
-    public void UpdateScore(string key, int delta) {
+    public void UpdateScore(string key, int delta)
+    {
         string output = $"key={key}, delta={delta}";
         if (user.scores.ContainsKey(key)) user.scores[key] += delta;
         else user.scores[key] = delta;
         Debug.Log(user.ToString());
     }
 
-    public void PostDB() {
+    public void PostDB()
+    {
         if (user == null) return;
         if (user.scores == null) return;
-        if (string.IsNullOrWhiteSpace( user.username )) return;
+        if (string.IsNullOrWhiteSpace(user.username)) return;
 
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace("https://moonspeak-giraffesyo.vercel.app/user/", @"[^\x00-\x7F]+", ""));
         request.ContentType = "application/json; charset=utf-8";
@@ -95,7 +101,8 @@ public class PlayerInfo : MonoBehaviour
         jsonBody = jsonBody.Remove(jsonBody.Length - 1, 1);
         jsonBody += " } } }";
 
-        using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
+        using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+        {
             streamWriter.Write(jsonBody);
             streamWriter.Flush();
         }
