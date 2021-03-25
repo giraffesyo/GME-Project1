@@ -7,11 +7,11 @@ ACCESS_KEY = os.environ['MOONSPEAK_ACCESS_KEY']
 SECRET_KEY = os.environ['MOONSPEAK_SECRET_KEY']
 
 
-dynamodb = boto3.client('dynamodb', aws_access_key_id=ACCESS_KEY,
-                        aws_secret_access_key=SECRET_KEY
-                        )
+session = boto3.session.Session(aws_access_key_id=ACCESS_KEY,
+                                aws_secret_access_key=SECRET_KEY
+                                )
 
-#dynamodb = boto3.resource('dynamodb')
+dynamodb = session.resource('dynamodb')
 table = dynamodb.Table('Scores')
 
 app = Flask(__name__)
