@@ -70,8 +70,8 @@ def postScores():
 
     return response
 
-Fetches user information
-If username does not exist in DB, create user
+# Fetches user information
+# If username does not exist in DB, create user
 
 
 @app.route('/user/<username>', methods=['GET'])
