@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, abort, send_file, flash, redirect
+from flask import Flask, jsonify, request, abort, send_file, redirect
 from werkzeug.utils import secure_filename
 from io import BytesIO
 import boto3
@@ -12,10 +12,9 @@ S3_BUCKET = "moonspeaks" # idk whatever works
 
 session = boto3.session.Session(aws_access_key_id=ACCESS_KEY,
                                 aws_secret_access_key=SECRET_KEY,
-                                aws_session_token=SESSION
                                 )
 
-dynamodb = session.resource('dynamodb', region_name='us-west-2')
+dynamodb = session.resource('dynamodb')
 table = dynamodb.Table('Scores')
 s3_client = session.client('s3')
 s3_client.create_bucket(Bucket=S3_BUCKET)
