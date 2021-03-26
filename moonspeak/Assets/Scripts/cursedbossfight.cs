@@ -86,8 +86,12 @@ public class cursedbossfight : MonoBehaviour
         
         if (currentName == buttonText.GetComponent<TextMeshProUGUI>().text)
         {
+            PlayerInfo.playerInfo.UpdateScore(currentName, 1); // Updates User Score for word
             gameObject.GetComponent<shootfruit>().addProjectile(currentFood);
             NextReviewQuestion();
+        }
+        else {
+            PlayerInfo.playerInfo.UpdateScore(currentName, -1); // Updates User Score for word
         }
     }
 
