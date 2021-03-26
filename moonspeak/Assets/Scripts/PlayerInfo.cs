@@ -2,8 +2,6 @@ using System;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Net;
-using System.Text;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -61,7 +59,7 @@ public class PlayerInfo : MonoBehaviour
     private static User getUser(string username)
     {
         User user = null;
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace($"https://moonspeak-giraffesyo.vercel.app/user/{username}", @"[^\x00-\x7F]+", ""));
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace($"https://moonspeak.giraffesyo.dev/user/{username}", @"[^\x00-\x7F]+", ""));
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
         StreamReader readStream = new StreamReader(response.GetResponseStream());
         string jsonResponse = readStream.ReadToEnd();
@@ -75,7 +73,7 @@ public class PlayerInfo : MonoBehaviour
         if (string.IsNullOrWhiteSpace(user.username)) return;
         if (user.scores == null) return;
 
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace("https://moonspeak-giraffesyo.vercel.app/user/", @"[^\x00-\x7F]+", ""));
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace("https://moonspeak.giraffesyo.dev/user/", @"[^\x00-\x7F]+", ""));
         request.ContentType = "application/json; charset=utf-8";
         request.Method = "POST";
 
@@ -84,7 +82,8 @@ public class PlayerInfo : MonoBehaviour
         jsonBody = jsonBody.Remove(jsonBody.Length - 1, 1);
         jsonBody += " } } }";
 
-        using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
+        using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+        {
             streamWriter.Write(jsonBody);
             streamWriter.Flush();
         }
@@ -96,8 +95,11 @@ public class PlayerInfo : MonoBehaviour
     {
         this.username = username;
         PlayerPrefs.SetString("username", username);
-        user = getUser(username);
-        Debug.Log("User Settings Pulled:\n" + user.ToString());
+        if (!String.IsNullOrWhiteSpace(username))
+        {
+            user = getUser(username);
+            Debug.Log("User Settings Pulled:\n" + user.ToString());
+        }
     }
 
     public void UpdateScore(string key, int delta)

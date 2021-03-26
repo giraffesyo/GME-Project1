@@ -17,15 +17,18 @@ public class ScoreManager : MonoBehaviour
         Debug.Log(username);
         Debug.Log(PlayerInfo.playerInfo.user.ToString());
 
-        if (string.IsNullOrWhiteSpace(username)) {
+        if (string.IsNullOrWhiteSpace(username))
+        {
             scoresTitle.text = "Player Scores";
             scoresBody.text = "Scores not available when not signed in!";
         }
-        else {
-            scoresTitle.text = $"{username} Scores";
-            
+        else
+        {
+            scoresTitle.text = $"Scores for {username}";
+
             string body = "";
-            foreach (KeyValuePair<string, int> kvp in PlayerInfo.playerInfo.user.scores) {
+            foreach (KeyValuePair<string, int> kvp in PlayerInfo.playerInfo.user.scores)
+            {
                 body += $"{kvp.Key}: {kvp.Value}\n";
             }
 
@@ -36,6 +39,6 @@ public class ScoreManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
