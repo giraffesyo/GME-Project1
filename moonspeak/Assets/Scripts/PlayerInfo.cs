@@ -30,26 +30,14 @@ public class PlayerInfo : MonoBehaviour
     public string username;
     public User user;
 
-    private static User getUser(string username)
-    {
-        User user = null;
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace($"https://moonspeak-giraffesyo.vercel.app/user/{username}", @"[^\x00-\x7F]+", ""));
-        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-        StreamReader readStream = new StreamReader(response.GetResponseStream());
-        string jsonResponse = readStream.ReadToEnd();
-        user = JsonConvert.DeserializeObject<User>(jsonResponse);
-        return user;
-    }
-
     async void Awake()
     {
         Debug.Log("hi");
         playerInfo = this;
 
         DontDestroyOnLoad(this);
-        username = "";
         // comment out below line to force login everytime
-        username = PlayerPrefs.GetString("username");
+        SetPlayer(PlayerPrefs.GetString("username"));
 
         // if we're on the splash screen, move to the right scene based on if we're logged in
         await RemoteAssetLoader.Instance.LoadAllAssets();
@@ -70,27 +58,22 @@ public class PlayerInfo : MonoBehaviour
         }
     }
 
-    public void SetPlayer(string username)
+    private static User getUser(string username)
     {
-        this.username = username;
-        PlayerPrefs.SetString("username", username);
-        user = getUser(username);
-        Debug.Log(user.ToString());
-    }
-
-    public void UpdateScore(string key, int delta)
-    {
-        string output = $"key={key}, delta={delta}";
-        if (user.scores.ContainsKey(key)) user.scores[key] += delta;
-        else user.scores[key] = delta;
-        Debug.Log(user.ToString());
+        User user = null;
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace($"https://moonspeak-giraffesyo.vercel.app/user/{username}", @"[^\x00-\x7F]+", ""));
+        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+        StreamReader readStream = new StreamReader(response.GetResponseStream());
+        string jsonResponse = readStream.ReadToEnd();
+        user = JsonConvert.DeserializeObject<User>(jsonResponse);
+        return user;
     }
 
     public void PostDB()
     {
         if (user == null) return;
-        if (user.scores == null) return;
         if (string.IsNullOrWhiteSpace(user.username)) return;
+        if (user.scores == null) return;
 
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(Regex.Replace("https://moonspeak-giraffesyo.vercel.app/user/", @"[^\x00-\x7F]+", ""));
         request.ContentType = "application/json; charset=utf-8";
@@ -101,15 +84,28 @@ public class PlayerInfo : MonoBehaviour
         jsonBody = jsonBody.Remove(jsonBody.Length - 1, 1);
         jsonBody += " } } }";
 
-        using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-        {
+        using (var streamWriter = new StreamWriter(request.GetRequestStream())) {
             streamWriter.Write(jsonBody);
             streamWriter.Flush();
         }
 
-        Debug.Log(jsonBody);
-
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+    }
+
+    public void SetPlayer(string username)
+    {
+        this.username = username;
+        PlayerPrefs.SetString("username", username);
+        user = getUser(username);
+        Debug.Log("User Settings Pulled:\n" + user.ToString());
+    }
+
+    public void UpdateScore(string key, int delta)
+    {
+        string output = $"key={key}, delta={delta}";
+        if (user.scores.ContainsKey(key)) user.scores[key] += delta;
+        else user.scores[key] = delta;
+        Debug.Log(user.ToString());
     }
 }
 

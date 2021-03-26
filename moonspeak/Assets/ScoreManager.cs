@@ -14,6 +14,9 @@ public class ScoreManager : MonoBehaviour
     void Start()
     {
         string username = PlayerInfo.playerInfo.username;
+        Debug.Log(username);
+        Debug.Log(PlayerInfo.playerInfo.user.ToString());
+
         if (string.IsNullOrWhiteSpace(username)) {
             scoresTitle.text = "Player Scores";
             scoresBody.text = "Scores not available when not signed in.";
