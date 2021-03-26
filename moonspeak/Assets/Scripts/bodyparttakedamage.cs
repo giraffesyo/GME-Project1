@@ -10,7 +10,7 @@ public class bodyparttakedamage : MonoBehaviour
     bool exploded = false;
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -33,14 +33,13 @@ public class bodyparttakedamage : MonoBehaviour
             }
             GameObject.Find("cursedboss").GetComponent<cursedbossfight>().bodypartAlive.Remove(gameObject.name);
             Destroy(gameObject, 3);
-            
+
             exploded = true;
         }
     }
 
     public void TakeDamage()
     {
-        Debug.Log("what");
         HPBar.value--;
     }
 }
