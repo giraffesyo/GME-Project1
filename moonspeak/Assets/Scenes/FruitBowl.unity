@@ -2829,7 +2829,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0.5}
-  m_SizeDelta: {x: 20, y: 5}
+  m_SizeDelta: {x: 30, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1849968499
 MonoBehaviour:
@@ -4037,7 +4037,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19b030cd8ef3e9e4d8c3921dc28c983a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fruitnameSpanish: Hamburgesa
+  fruitnameSpanish: Hamburguesa
   fruitnameEnglish: Hamburger
 --- !u!64 &5877548930400103861
 MeshCollider:
