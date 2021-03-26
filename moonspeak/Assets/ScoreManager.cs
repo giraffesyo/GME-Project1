@@ -19,7 +19,7 @@ public class ScoreManager : MonoBehaviour
 
         if (string.IsNullOrWhiteSpace(username)) {
             scoresTitle.text = "Player Scores";
-            scoresBody.text = "Scores not available when not signed in.";
+            scoresBody.text = "Scores not available when not signed in!";
         }
         else {
             scoresTitle.text = $"{username} Scores";
