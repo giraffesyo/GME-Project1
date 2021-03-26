@@ -8,7 +8,7 @@ public class SceneLoader : MonoBehaviour
 {
     public static void LoadScene(string sceneName)
     {
-        // PlayerInfo.playerInfo.PostDB();
+        PlayerInfo.playerInfo.PostDB();
         SceneManager.LoadSceneAsync(sceneName);
     }
 }
